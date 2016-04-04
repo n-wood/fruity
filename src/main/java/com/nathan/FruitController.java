@@ -17,9 +17,9 @@ public class FruitController
 		String basket = request.getParameter("basket");
 		Basket myBasket = new Basket();
 		myBasket.populateBasket(basket);
-		myBasket.getReceipt();
+		String response = myBasket.getReceipt();
 				
-		return myBasket.getReceipt();
+		return response;
 	}
 
 }
