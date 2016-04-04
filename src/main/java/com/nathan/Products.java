@@ -8,6 +8,7 @@ public class Products
 {
 	static Map<Fruit, BigDecimal> products;
 	
+	//TODO these values should be externalised for easy of change
 	static {
 		products =  new HashMap<Fruit, BigDecimal>();
 		products.put(Fruit.APPLE , new BigDecimal("0.60"));
@@ -26,7 +27,12 @@ public class Products
 			
 		}
 	};
-			
+	/**
+	 * Get a price for a piece of fruit
+	 * 		
+	 * @param fruit
+	 * @return the price
+	 */
 	public static BigDecimal getPrice(Fruit fruit)
 	{
 		
@@ -35,11 +41,23 @@ public class Products
 		
 	}
 	
+	/**
+	 * Get a price for a piece of fruit
+	 * 		
+	 * @param fruit
+	 * @return the price
+	 */
 	public static BigDecimal getPrice(String fruit)
 	{
 			return products.get(getFruitFromString(fruit));
 	}
 	
+	/**
+	 * Geta fruit Enum for a supplied string
+	 * 		
+	 * @param fruit string
+	 * @return Fruit enum
+	 */
 	public static Fruit getFruitFromString(String fruit)
 	{
 		Fruit fruitObj;

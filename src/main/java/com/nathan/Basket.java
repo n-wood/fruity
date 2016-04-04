@@ -12,13 +12,19 @@ public class Basket
 {
 	private ArrayList<Fruit> basket;
 	
+	//	safest way to store currency
 	private BigDecimal totalCost = new BigDecimal(0);
 	
-	public ArrayList<Fruit> populateBasket(String basketItems)
+	/**
+	 * 
+	 * @param basketItems comma separated list of apples and oranges.
+	 * @return
+	 */
+	public void populateBasket(String basketItems)
 	{
 		if (StringUtils.isEmpty(basketItems))
 		{
-			return basket;
+			return ;
 		}
 		
 		String[] items = basketItems.split(",");
@@ -34,9 +40,13 @@ public class Basket
 			totalCost = totalCost.add(Products.getPrice(item.trim()));
 		}
 		
-		return basket;
+		return ;
 	}
 	
+	/**
+	 * 
+	 * @return json formatted receipt containing order details and total cost. 
+	 */
 	public String getReceipt()
 	{
 		
