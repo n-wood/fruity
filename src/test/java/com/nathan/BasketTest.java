@@ -15,7 +15,8 @@ import static org.junit.Assert.*;
  */
 public class BasketTest {
 
-	
+	//used in comparison of double numbers
+	private static double SMALL_NUMBER=0.0000001d;
 	
 	@Test
 	public void testPopulateBasketEmpty() 
@@ -25,14 +26,14 @@ public class BasketTest {
 		unit.populateBasket("");
 		String output = unit.getReceipt();
 		Basket result = gson.fromJson(output, Basket.class);
-		assertEquals(0, result.getTotalCost().doubleValue(),0);
+		assertEquals(0, result.getTotalCost().doubleValue(),SMALL_NUMBER);
 		
 		gson = new Gson();
 		unit = new Basket();
 		unit.populateBasket(null);
 		output = unit.getReceipt();
 		result = gson.fromJson(output, Basket.class);
-		assertEquals(0, result.getTotalCost().doubleValue(),0);
+		assertEquals(0, result.getTotalCost().doubleValue(),SMALL_NUMBER);
 	}
 	
 	@Test
@@ -43,7 +44,7 @@ public class BasketTest {
 		unit.populateBasket("apple");
 		String output = unit.getReceipt();
 		Basket result = gson.fromJson(output, Basket.class);
-		assertEquals(0.6,result.getTotalCost().doubleValue(),0);
+		assertEquals(0.6,result.getTotalCost().doubleValue(),SMALL_NUMBER);
 		assertTrue(result.getBasket().contains(Products.Fruit.APPLE));
 		
 		gson = new Gson();
@@ -51,7 +52,7 @@ public class BasketTest {
 		unit.populateBasket("orange,");
 		output = unit.getReceipt();
 		result = gson.fromJson(output, Basket.class);
-		assertEquals(0.25, result.getTotalCost().doubleValue(),0);
+		assertEquals(0.25, result.getTotalCost().doubleValue(),SMALL_NUMBER);
 		assertTrue(result.getBasket().contains(Products.Fruit.ORANGE));
 	}
 	
@@ -64,7 +65,7 @@ public class BasketTest {
 		unit.populateBasket("apple,Apple,Orange,APPLE");
 		String output = unit.getReceipt();
 		Basket result = gson.fromJson(output, Basket.class);
-		assertEquals(2.05,result.getTotalCost().doubleValue(),0);
+		assertEquals(2.05-0.60,result.getTotalCost().doubleValue(),SMALL_NUMBER);
 		assertEquals(4, result.getBasket().size());
 		
 		gson = new Gson();
@@ -72,11 +73,10 @@ public class BasketTest {
 		unit.populateBasket("orange,ORANGE,OrAnGE,APPLE,APPLE,APPLE");
 		output = unit.getReceipt();
 		result = gson.fromJson(output, Basket.class);
-		assertEquals(2.55, result.getTotalCost().doubleValue(),0);
+		assertEquals(2.55-0.60-0.25, result.getTotalCost().doubleValue(),SMALL_NUMBER);
 		assertEquals(6, result.getBasket().size());
 	}
 	
-
 	@Test
 	public void testPopulateBasketWithCoconut() 
 	{
@@ -92,5 +92,77 @@ public class BasketTest {
 			return;
 		}
 		fail("Shouldn't have got this far!");
+	}
+	
+	@Test
+	public void testPopulateBasketBOGOFF() 
+	{
+		Gson gson = new Gson();
+		Basket unit = new Basket();
+		unit.populateBasket("apple,Apple,APPLE,apple");
+		String output = unit.getReceipt();
+		Basket result = gson.fromJson(output, Basket.class);
+		assertEquals(2.40-1.20, result.getTotalCost().doubleValue(),SMALL_NUMBER);
+				
+
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("apple,Apple,apple");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(1.8-0.6,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("apple,Apple");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(1.2-0.6,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("apple");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(0.6,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+	}
+	
+	@Test
+	public void testPopulateBasketThreeForTwo() 
+	{
+		Gson gson = new Gson();
+		Basket unit = new Basket();
+		unit.populateBasket("orange,orange,orange,orange,orange,orange,orange");
+		String output = unit.getReceipt();
+		Basket result = gson.fromJson(output, Basket.class);
+		assertEquals(1.75-0.5,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+	
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("orange,orange,orange");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(0.75-0.25,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+	
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("orange,orange");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(0.5,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
+		
+		gson = new Gson();
+		unit = new Basket();
+		unit.populateBasket("orange");
+		output = unit.getReceipt();
+		result = gson.fromJson(output, Basket.class);
+		assertEquals(0.25,result.getTotalCost().doubleValue(),SMALL_NUMBER);
+		
 	}
 }

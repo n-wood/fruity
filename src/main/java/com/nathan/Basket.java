@@ -15,6 +15,8 @@ public class Basket
 	//	safest way to store currency
 	private BigDecimal totalCost = new BigDecimal(0);
 	
+	private BigDecimal totalDiscount =null;
+	
 	/**
 	 * 
 	 * @param basketItems comma separated list of apples and oranges.
@@ -49,7 +51,12 @@ public class Basket
 	 */
 	public String getReceipt()
 	{
-		
+		BigDecimal discount = Offers.calculateDiscount(getBasket());
+		if (discount.doubleValue() > 0)
+		{
+			this.totalDiscount = discount;
+			this.totalCost = totalCost.subtract(discount);
+		}
 		Gson gson = new Gson();
 		String json = gson.toJson(this);
 		
